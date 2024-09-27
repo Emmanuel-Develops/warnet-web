@@ -45,7 +45,7 @@ export const NodeGraphFlowProvider = ({
 
   const router = useRouter()
   const searchParams = useSearchParams();
-  const networkQuery = searchParams.get("network");
+  const networkQuery = searchParams?.get("network");
   const showGraph = Boolean(networkQuery);
 
   function reset() {

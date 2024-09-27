@@ -5,7 +5,7 @@ import styles from "@/components/styles.module.css";
 import { useAwardedPointsContext } from "@/contexts/awarded-points-context";
 
 const page = () => {
-  const {points, stylePoints, updateStylePoints, savePoints} = useAwardedPointsContext()
+  const {points, internalData, stylePoints, updateStylePoints, savePoints} = useAwardedPointsContext()
  
   return (
     <div className={`text-black max-h-screen min-h-screen overflow-hidden h-screen flex flex-col px-[100px] py-20 ${styles.adminWrapper}`}>
@@ -28,9 +28,9 @@ const page = () => {
                 className='p-3 rounded-lg text-white border border-gray-500 w-full bg-[#0000007f] bg-gray-600'
                 onChange={(e) => updateStylePoints({ type: "name", value: e.target.value })}
               >
-                <option value=''>Selected</option>
-                {Object.entries(points).map(([key], index) => (
-                  <React.Fragment key={`${key}-${index}`}>
+                <option value=''>Select a team</option>
+                {Object.keys(points).map((key, index) => (
+                <React.Fragment key={`${key}-${index}`}>
                     <option key={`${key}-${index}`} value={key}>
                       {key}
                     </option>
@@ -42,14 +42,14 @@ const page = () => {
                 className='p-3 rounded-lg text-white border border-gray-500 w-full bg-[#0000007f] bg-gray-600'
                 onChange={(e) => updateStylePoints({ type: "score", value: e.target.value })}
                 value={stylePoints.score}
-                placeholder='Award style points'
+                placeholder='style points to award'
               />
             </section>
           </div>
         </div>
 
-        <button onClick={savePoints} disabled={!stylePoints.name && !stylePoints.score} className='text-white bg-brand-purple rounded-lg px-4 py-3 text-sm w-full max-w-[500px] '>
-          Update
+        <button onClick={() => savePoints()} disabled={!stylePoints.name || !stylePoints.score} className='text-white disabled:bg-gray-400 disabled:text-gray-500 disabled:cursor-not-allowed bg-brand-purple rounded-lg px-4 py-3 text-sm w-full max-w-[500px] '>
+          Award points
         </button>
       </div>
     </div>

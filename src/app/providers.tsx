@@ -1,5 +1,6 @@
 // In Next.js, this file would be called: app/providers.tsx
 "use client";
+import { AwardedPointsProvider } from "@/contexts/awarded-points-context";
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
 import {
   isServer,
@@ -35,7 +36,7 @@ function getQueryClient() {
   }
 }
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function QueryProvider({ children }: { children: React.ReactNode }) {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
   //       suspend because React will throw away the client on the initial
@@ -43,6 +44,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+    </QueryClientProvider>
   );
 }

@@ -42,3 +42,14 @@ export type HeaderInfoData = {
   nonce: number;
   miner: string;
 };
+
+export type AwardedTeamPoints = Record<string, number>;
+export type EVENT = {
+  message: string;
+  date: string;
+}
+
+export type InternalData = {
+  points: AwardedTeamPoints;
+  events: EVENT[];
+}

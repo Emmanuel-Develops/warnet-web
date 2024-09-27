@@ -47,7 +47,7 @@ export const NetworkProvider = ({
 }) => {
   // const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true);
   const searchParams = useSearchParams()
-  const networkQuery = searchParams.get("network")
+  const networkQuery = searchParams?.get("network")
   const isDialogOpen = Boolean(!networkQuery)
 
   const [selectedNetwork, setSelectedNetwork] = useState(newNetworkTopology);

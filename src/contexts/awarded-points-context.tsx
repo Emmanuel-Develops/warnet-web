@@ -1,9 +1,11 @@
 "use client"
 import React, { useState } from "react";
-
-import AWARDED_TEAM_POINTS from "@/public/team-points.json";
+import { useRouter } from "next/navigation";
+import { useInternalData } from "@/services/useInternalData";
+import { InternalData } from "@/types";
 
 type AwardedPointsContext = {
+  internalData: InternalData;
   points: Record<string, number>;
   stylePoints: {name: string, score: string};
   updateStylePoints: ({type, value}: {type: "name" | "score", value: string}) => void;
@@ -14,14 +16,19 @@ export const awardedPointsContext = React.createContext<AwardedPointsContext>(nu
 
 export const AwardedPointsProvider = ({
   children,
+  initialInternalData,
 }: {
   children: React.ReactNode;
+  initialInternalData: InternalData;
 }) => {
   const defaultStylePoints = {
     name: "",
     score: ""
   }
-  const [points, setPoints] = useState(AWARDED_TEAM_POINTS as Record<string, number>);
+  const [points, setPoints] = useState(initialInternalData.points);
+  const {data: internalData} = useInternalData({initialData: initialInternalData});
+
+  console.log("internalData at award context", {internalData})
 
   const [stylePoints, setStylePoints] = useState(defaultStylePoints);
 
@@ -30,6 +37,7 @@ export const AwardedPointsProvider = ({
   }
 
   const handleSaveConfig = async () => {
+    updateClientPoints({name: stylePoints.name, score: Number(stylePoints.score)});
     try {
       const response = await fetch("/api/save-config", {
         method: "POST",
@@ -46,21 +54,25 @@ export const AwardedPointsProvider = ({
       } else {
         alert("Error: " + result.message);
       }
+      setStylePoints(defaultStylePoints)
     } catch (error) {
       console.error("Failed to save config:", error);
     }
   };
 
   const updateClientPoints = ({name, score}: {name: string, score: number}) => {
-    const newPoints = { ...points };
-    newPoints[name] = newPoints[name] ?? 0 + score;
-    setPoints(newPoints);
+    console.log({name, score});
+    const newPoints = JSON.parse(JSON.stringify(points));
+    newPoints[name] = (newPoints[name] ?? 0) + score;
+    console.log({newPoints})
+    setPoints({...newPoints});
   }
 
   return (
     <awardedPointsContext.Provider
       value={{
         points,
+        internalData,
         stylePoints,
         updateStylePoints,
         savePoints: handleSaveConfig,

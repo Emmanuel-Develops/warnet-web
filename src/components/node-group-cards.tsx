@@ -1,5 +1,4 @@
 import React from "react";
-import AWARDED_TEAM_POINTS from "../../public/team-points.json";
 import { NodeDataWithStatus } from "@/types";
 import { StatusCofig } from "@/app/config";
 
@@ -63,7 +62,7 @@ type LeaderBoardCardsProps = {
 };
 
 export const LeaderBoardCards = ({ teamName, index, pointsMapper, awardedPoints }: LeaderBoardCardsProps) => {
-  const totalPoints = pointsMapper[teamName] + awardedPoints[teamName] ?? 0;
+  const totalPoints = pointsMapper[teamName] + (awardedPoints[teamName] ?? 0);
 
   return (
     <div className='flex gap-3 items-center'>
