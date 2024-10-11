@@ -6,6 +6,11 @@
 .pnp.js
 .yarn/install-state.gz
 
+#internal
+// ignore all files in the /data folder
+/data/events.json
+/data/team-points.json
+
 # testing
 /coverage
 
